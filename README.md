@@ -586,7 +586,7 @@ Together, these results indicate differences in microbial diversity, community c
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/<YOUR_USERNAME>/CoMeg_Assignment_2.git
+git clone https://github.com/sunandini333/CoMeg_Assignment_2.git
 ```
 
 ### Step 2: Navigate to the Project Directory
