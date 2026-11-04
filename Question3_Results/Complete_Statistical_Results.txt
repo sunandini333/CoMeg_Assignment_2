@@ -1,0 +1,101 @@
+====================================
+QUESTION 3: SPECIES PREVALENCE
+====================================
+
+CONTROL SAMPLE SIZE:
+[1] 133
+
+DISEASED SAMPLE SIZE:
+[1] 132
+
+TOTAL SPECIES:
+[1] 777
+
+SPECIES RETAINED AFTER FILTERING:
+[1] 392
+
+SIGNIFICANT SPECIES:
+[1] 90
+
+TOP POSITIVE PREVALENCE DIFFERENCES:
+                  Species Control_Present Control_Absent Control_Prevalence
+1 Lactobacillus_fermentum              16            117          0.1203008
+2 Granulicatella_adiacens              72             61          0.5413534
+3      Scardovia_wiggsiae              53             80          0.3984962
+  Control_Prevalence_Percent Diseased_Present Diseased_Absent Diseased_Prevalence
+1                   12.03008               35              97           0.2651515
+2                   54.13534               90              42           0.6818182
+3                   39.84962               69              63           0.5227273
+  Diseased_Prevalence_Percent Prevalence_Difference_PP Total_Present Odds_Ratio  CI_Lower
+1                    26.51515                 14.48508            51  0.3803795 0.1847625
+2                    68.18182                 14.04648           162  0.5520673 0.3234575
+3                    52.27273                 12.42310           122  0.6060389 0.3608825
+   CI_Upper     P_Value Adjusted_P_Value Significance Significant
+1 0.7551794 0.003053828       0.01772399            *        TRUE
+2 0.9360264 0.023252027       0.08764225           NS       FALSE
+3 1.0130857 0.048904984       0.14807587           NS       FALSE
+
+TOP NEGATIVE PREVALENCE DIFFERENCES:
+                     Species Control_Present Control_Absent Control_Prevalence
+1 Clostridium_aminobutyricum              81             52          0.6090226
+2   Cardiobacterium_valvarum             119             14          0.8947368
+3            Treponema_pedis              84             49          0.6315789
+  Control_Prevalence_Percent Diseased_Present Diseased_Absent Diseased_Prevalence
+1                   60.90226               32             100           0.2424242
+2                   89.47368               77              55           0.5833333
+3                   63.15789               44              88           0.3333333
+  Diseased_Prevalence_Percent Prevalence_Difference_PP Total_Present Odds_Ratio CI_Lower
+1                    24.24242                -36.65983           113   4.835979 2.778664
+2                    58.33333                -31.14035           196   6.029245 3.056003
+3                    33.33333                -29.82456           128   3.411481 2.007561
+   CI_Upper      P_Value Adjusted_P_Value Significance Significant
+1  8.569008 1.656143e-09     6.492079e-07          ***        TRUE
+2 12.583859 4.952019e-09     9.705958e-07          ***        TRUE
+3  5.866913 1.435942e-06     8.041275e-05          ***        TRUE
+
+LARGEST PREVALENCE DIFFERENCE SPECIES:
+                     Species Control_Present Control_Absent Control_Prevalence
+1 Clostridium_aminobutyricum              81             52          0.6090226
+  Control_Prevalence_Percent Diseased_Present Diseased_Absent Diseased_Prevalence
+1                   60.90226               32             100           0.2424242
+  Diseased_Prevalence_Percent Prevalence_Difference_PP Total_Present Odds_Ratio CI_Lower
+1                    24.24242                -36.65983           113   4.835979 2.778664
+  CI_Upper      P_Value Adjusted_P_Value Significance Significant
+1 8.569008 1.656143e-09     6.492079e-07          ***        TRUE
+
+DISCORDANT SPECIES:
+                 Species Control_Present Control_Absent Control_Prevalence
+1 Streptococcus_sinensis              99             34          0.7443609
+  Control_Prevalence_Percent Diseased_Present Diseased_Absent Diseased_Prevalence
+1                   74.43609               70              62            0.530303
+  Diseased_Prevalence_Percent Prevalence_Difference_PP Total_Present Odds_Ratio CI_Lower
+1                     53.0303                -21.40579           169   2.569523 1.489361
+  CI_Upper      P_Value Adjusted_P_Value Significance Significant Control_Mean_Abundance
+1 4.487266 0.0003378278      0.003579149           **        TRUE           0.0003013071
+  Diseased_Mean_Abundance Control_Mean_Among_Present Diseased_Mean_Among_Present
+1            0.0003223711               0.0004047864                0.0006078998
+  Mean_Abundance_Difference Conditional_Mean_Difference
+1              2.106397e-05                0.0002031135
+
+SELECTED SPECIES COMPARISON:
+                     Species Control_Present Control_Absent Control_Prevalence
+1 Clostridium_aminobutyricum              81             52          0.6090226
+2     Streptococcus_sinensis              99             34          0.7443609
+  Control_Prevalence_Percent Diseased_Present Diseased_Absent Diseased_Prevalence
+1                   60.90226               32             100           0.2424242
+2                   74.43609               70              62           0.5303030
+  Diseased_Prevalence_Percent Prevalence_Difference_PP Total_Present Odds_Ratio CI_Lower
+1                    24.24242                -36.65983           113   4.835979 2.778664
+2                    53.03030                -21.40579           169   2.569523 1.489361
+  CI_Upper      P_Value Adjusted_P_Value Significance Significant Control_Mean_Abundance
+1 8.569008 1.656143e-09     6.492079e-07          ***        TRUE           0.0001029552
+2 4.487266 3.378278e-04     3.579149e-03           **        TRUE           0.0003013071
+  Diseased_Mean_Abundance Control_Mean_Among_Present Diseased_Mean_Among_Present
+1            3.374572e-05               0.0001690498                0.0001392011
+2            3.223711e-04               0.0004047864                0.0006078998
+  Mean_Abundance_Difference Conditional_Mean_Difference
+1             -6.920943e-05               -2.984871e-05
+2              2.106397e-05                2.031135e-04
+                            Selection
+1       Largest prevalence difference
+2 Discordant prevalence and abundance

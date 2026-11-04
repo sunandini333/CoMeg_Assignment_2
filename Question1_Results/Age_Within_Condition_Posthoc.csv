@@ -1,0 +1,7 @@
+"study_condition",".y.","group1","group2","n1","n2","statistic","p","p.adj","p.adj.signif"
+"Control","Shannon","young","middle age",31,77,1.23242807296072,0.217789219619766,0.326683829429649,"ns"
+"Control","Shannon","young","senior",31,25,1.71763865325093,0.0858625453737789,0.257587636121337,"ns"
+"Control","Shannon","middle age","senior",77,25,0.866972580294403,0.385957033530553,0.385957033530553,"ns"
+"Diseased","Shannon","young","middle age",34,80,-1.28513126864853,0.198746416485456,0.596239249456369,"ns"
+"Diseased","Shannon","young","senior",34,18,-0.321834642346143,0.747577968596568,0.747577968596568,"ns"
+"Diseased","Shannon","middle age","senior",80,18,0.648912018634971,0.516395245846347,0.747577968596568,"ns"

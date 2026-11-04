@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<!-- Created by igraph -->
+  <key id="v_name" for="node" attr.name="name" attr.type="string"/>
+  <key id="v_degree" for="node" attr.name="degree" attr.type="double"/>
+  <key id="e_rho" for="edge" attr.name="rho" attr.type="double"/>
+  <key id="e_adjusted_p" for="edge" attr.name="adjusted_p" attr.type="double"/>
+  <key id="e_association" for="edge" attr.name="association" attr.type="string"/>
+  <graph id="G" edgedefault="undirected">
+    <node id="n0">
+      <data key="v_name">Lachnoanaerobaculum_orale</data>
+      <data key="v_degree">7</data>
+    </node>
+    <node id="n1">
+      <data key="v_name">Selenomonas_noxia</data>
+      <data key="v_degree">2</data>
+    </node>
+    <node id="n2">
+      <data key="v_name">Leptotrichia_buccalis</data>
+      <data key="v_degree">2</data>
+    </node>
+    <node id="n3">
+      <data key="v_name">Achromobacter_xylosoxidans</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n4">
+      <data key="v_name">Porphyromonas_endodontalis</data>
+      <data key="v_degree">5</data>
+    </node>
+    <node id="n5">
+      <data key="v_name">Treponema_maltophilum</data>
+      <data key="v_degree">2</data>
+    </node>
+    <node id="n6">
+      <data key="v_name">Eubacterium_nodatum</data>
+      <data key="v_degree">5</data>
+    </node>
+    <node id="n7">
+      <data key="v_name">Pelospora_glutarica</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n8">
+      <data key="v_name">Capnocytophaga_granulosa</data>
+      <data key="v_degree">2</data>
+    </node>
+    <node id="n9">
+      <data key="v_name">Treponema_socranskii</data>
+      <data key="v_degree">7</data>
+    </node>
+    <node id="n10">
+      <data key="v_name">Treponema_vincentii</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n11">
+      <data key="v_name">Porphyromonas_gingivalis</data>
+      <data key="v_degree">6</data>
+    </node>
+    <node id="n12">
+      <data key="v_name">Tannerella_forsythia</data>
+      <data key="v_degree">5</data>
+    </node>
+    <node id="n13">
+      <data key="v_name">Solobacterium_moorei</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n14">
+      <data key="v_name">Capnocytophaga_leadbetteri</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n15">
+      <data key="v_name">Lachnoanaerobaculum_umeaense</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n16">
+      <data key="v_name">Selenomonas_infelix</data>
+      <data key="v_degree">3</data>
+    </node>
+    <node id="n17">
+      <data key="v_name">Treponema_denticola</data>
+      <data key="v_degree">13</data>
+    </node>
+    <node id="n18">
+      <data key="v_name">Atopobium_parvulum</data>
+      <data key="v_degree">4</data>
+    </node>
+    <node id="n19">
+      <data key="v_name">Olsenella_uli</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n20">
+      <data key="v_name">Filifactor_alocis</data>
+      <data key="v_degree">13</data>
+    </node>
+    <node id="n21">
+      <data key="v_name">Butyrivibrio_proteoclasticus</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n22">
+      <data key="v_name">Fretibacterium_fastidiosum</data>
+      <data key="v_degree">14</data>
+    </node>
+    <node id="n23">
+      <data key="v_name">Prevotella_oris</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n24">
+      <data key="v_name">Mobiluncus_mulieris</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n25">
+      <data key="v_name">Leptotrichia_trevisanii</data>
+      <data key="v_degree">2</data>
+    </node>
+    <node id="n26">
+      <data key="v_name">Brachymonas_denitrificans</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n27">
+      <data key="v_name">Schwartzia_succinivorans</data>
+      <data key="v_degree">5</data>
+    </node>
+    <node id="n28">
+      <data key="v_name">Prevotella_oulorum</data>
+      <data key="v_degree">4</data>
+    </node>
+    <node id="n29">
+      <data key="v_name">Eubacterium_brachy</data>
+      <data key="v_degree">4</data>
+    </node>
+    <node id="n30">
+      <data key="v_name">Prevotella_histicola</data>
+      <data key="v_degree">5</data>
+    </node>
+    <node id="n31">
+      <data key="v_name">Mycoplasma_faucium</data>
+      <data key="v_degree">5</data>
+    </node>
+    <node id="n32">
+      <data key="v_name">Eubacterium_saphenum</data>
+      <data key="v_degree">7</data>
+    </node>
+    <node id="n33">
+      <data key="v_name">Treponema_pedis</data>
+      <data key="v_degree">2</data>
+    </node>
+    <node id="n34">
+      <data key="v_name">Prevotella_pallens</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n35">
+      <data key="v_name">Selenomonas_sputigena</data>
+      <data key="v_degree">7</data>
+    </node>
+    <node id="n36">
+      <data key="v_name">Atopobium_rimae</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n37">
+      <data key="v_name">Veillonella_dispar</data>
+      <data key="v_degree">4</data>
+    </node>
+    <node id="n38">
+      <data key="v_name">Prevotella_intermedia</data>
+      <data key="v_degree">7</data>
+    </node>
+    <node id="n39">
+      <data key="v_name">Treponema_amylovorum</data>
+      <data key="v_degree">6</data>
+    </node>
+    <node id="n40">
+      <data key="v_name">Prevotella_salivae</data>
+      <data key="v_degree">8</data>
+    </node>
+    <node id="n41">
+      <data key="v_name">Aggregatibacter_aphrophilus</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n42">
+      <data key="v_name">Treponema_medium</data>
+      <data key="v_degree">19</data>
+    </node>
+    <node id="n43">
+      <data key="v_name">Veillonella_atypica</data>
+      <data key="v_degree">7</data>
+    </node>
+    <node id="n44">
+      <data key="v_name">Haemophilus_haemolyticus</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n45">
+      <data key="v_name">Leptotrichia_wadei</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n46">
+      <data key="v_name">Megasphaera_micronuciformis</data>
+      <data key="v_degree">7</data>
+    </node>
+    <node id="n47">
+      <data key="v_name">Centipeda_periodontii</data>
+      <data key="v_degree">2</data>
+    </node>
+    <node id="n48">
+      <data key="v_name">Leptotrichia_hofstadii</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n49">
+      <data key="v_name">Lautropia_mirabilis</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n50">
+      <data key="v_name">Syntrophomonas_palmitatica</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n51">
+      <data key="v_name">Capnocytophaga_gingivalis</data>
+      <data key="v_degree">2</data>
+    </node>
+    <node id="n52">
+      <data key="v_name">Capnocytophaga_ochracea</data>
+      <data key="v_degree">2</data>
+    </node>
+    <node id="n53">
+      <data key="v_name">Selenomonas_dianae</data>
+      <data key="v_degree">7</data>
+    </node>
+    <node id="n54">
+      <data key="v_name">Eubacterium_sulci</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n55">
+      <data key="v_name">Fusobacterium_periodonticum</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n56">
+      <data key="v_name">Olsenella_profusa</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n57">
+      <data key="v_name">Fusobacterium_nucleatum</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n58">
+      <data key="v_name">Butyrivibrio_hungatei</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n59">
+      <data key="v_name">Prevotella_nigrescens</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n60">
+      <data key="v_name">Mobiluncus_curtisii</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n61">
+      <data key="v_name">Leptotrichia_shahii</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n62">
+      <data key="v_name">Anaeroglobus_geminatus</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n63">
+      <data key="v_name">Shuttleworthia_satelles</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n64">
+      <data key="v_name">Aggregatibacter_segnis</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n65">
+      <data key="v_name">Treponema_succinifaciens</data>
+      <data key="v_degree">1</data>
+    </node>
+    <node id="n66">
+      <data key="v_name">Granulicatella_elegans</data>
+      <data key="v_degree">1</data>
+    </node>
+    <edge source="n0" target="n18">
+      <data key="e_rho">0.641273602670846</data>
+      <data key="e_adjusted_p">2.10328828333785e-29</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n0" target="n28">
+      <data key="e_rho">0.640667586363345</data>
+      <data key="e_adjusted_p">2.4695514841291e-29</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n0" target="n30">
+      <data key="e_rho">0.634957430855603</data>
+      <data key="e_adjusted_p">1.13523950893642e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n0" target="n45">
+      <data key="e_rho">0.617608230340346</data>
+      <data key="e_adjusted_p">9.77220589117495e-27</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n0" target="n40">
+      <data key="e_rho">0.692248772636537</data>
+      <data key="e_adjusted_p">4.32566583451237e-36</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n0" target="n43">
+      <data key="e_rho">0.71402526866838</data>
+      <data key="e_adjusted_p">2.01957949055785e-39</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n0" target="n46">
+      <data key="e_rho">0.731849947850442</data>
+      <data key="e_adjusted_p">2.8703081468457e-42</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n1" target="n35">
+      <data key="e_rho">0.651692335598899</data>
+      <data key="e_adjusted_p">1.20405795682386e-30</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n1" target="n47">
+      <data key="e_rho">0.672427937933839</data>
+      <data key="e_adjusted_p">2.41313349264494e-33</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n2" target="n25">
+      <data key="e_rho">0.634581706811108</data>
+      <data key="e_adjusted_p">1.23910377535085e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n2" target="n48">
+      <data key="e_rho">0.763109638318309</data>
+      <data key="e_adjusted_p">6.27913945029015e-48</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n3" target="n49">
+      <data key="e_rho">0.601536238889148</data>
+      <data key="e_adjusted_p">5.48702475849848e-25</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n4" target="n17">
+      <data key="e_rho">0.666831113622792</data>
+      <data key="e_adjusted_p">1.33666240027838e-32</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n4" target="n20">
+      <data key="e_rho">0.678271448630094</data>
+      <data key="e_adjusted_p">3.88704550465051e-34</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n4" target="n38">
+      <data key="e_rho">0.7116787165673</data>
+      <data key="e_adjusted_p">4.74948805863238e-39</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n4" target="n39">
+      <data key="e_rho">0.603178351977466</data>
+      <data key="e_adjusted_p">3.7012612864157e-25</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n4" target="n42">
+      <data key="e_rho">0.740744050498662</data>
+      <data key="e_adjusted_p">7.78903769780517e-44</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n5" target="n17">
+      <data key="e_rho">0.612244653293799</data>
+      <data key="e_adjusted_p">3.83196965867261e-26</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n5" target="n42">
+      <data key="e_rho">0.617902328835145</data>
+      <data key="e_adjusted_p">9.21519283672594e-27</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n6" target="n17">
+      <data key="e_rho">0.630744247995422</data>
+      <data key="e_adjusted_p">3.48714129292454e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n6" target="n20">
+      <data key="e_rho">0.769950340185819</data>
+      <data key="e_adjusted_p">2.74595281460627e-49</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n6" target="n22">
+      <data key="e_rho">0.642012369457534</data>
+      <data key="e_adjusted_p">1.72364665646336e-29</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n6" target="n31">
+      <data key="e_rho">0.622162523068416</data>
+      <data key="e_adjusted_p">2.98974517482421e-27</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n6" target="n42">
+      <data key="e_rho">0.650180182406297</data>
+      <data key="e_adjusted_p">1.82916642801765e-30</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n7" target="n50">
+      <data key="e_rho">0.635657029031097</data>
+      <data key="e_adjusted_p">9.62403702182846e-29</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n8" target="n51">
+      <data key="e_rho">0.719642155347672</data>
+      <data key="e_adjusted_p">2.83706828026863e-40</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n8" target="n52">
+      <data key="e_rho">0.714056792855296</data>
+      <data key="e_adjusted_p">2.01957949055785e-39</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n9" target="n16">
+      <data key="e_rho">0.628053578139679</data>
+      <data key="e_adjusted_p">6.69199550693945e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n9" target="n17">
+      <data key="e_rho">0.669583519420914</data>
+      <data key="e_adjusted_p">5.78705688976936e-33</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n9" target="n22">
+      <data key="e_rho">0.642631242656059</data>
+      <data key="e_adjusted_p">1.48304000942154e-29</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n9" target="n27">
+      <data key="e_rho">0.65850952907966</data>
+      <data key="e_adjusted_p">1.57600690701039e-31</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n9" target="n35">
+      <data key="e_rho">0.684951554435253</data>
+      <data key="e_adjusted_p">4.42811218342191e-35</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n9" target="n42">
+      <data key="e_rho">0.674494348346667</data>
+      <data key="e_adjusted_p">1.25872646383614e-33</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n9" target="n53">
+      <data key="e_rho">0.666109871495083</data>
+      <data key="e_adjusted_p">1.61521702871419e-32</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n10" target="n42">
+      <data key="e_rho">0.630084751535697</data>
+      <data key="e_adjusted_p">4.04258292906439e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n11" target="n12">
+      <data key="e_rho">0.647264087052923</data>
+      <data key="e_adjusted_p">4.07071509906516e-30</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n11" target="n17">
+      <data key="e_rho">0.720231608412006</data>
+      <data key="e_adjusted_p">2.58532397853763e-40</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n11" target="n20">
+      <data key="e_rho">0.667509533996748</data>
+      <data key="e_adjusted_p">1.09949141404498e-32</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n11" target="n22">
+      <data key="e_rho">0.682733620237169</data>
+      <data key="e_adjusted_p">9.16279541516455e-35</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n11" target="n38">
+      <data key="e_rho">0.633705859916375</data>
+      <data key="e_adjusted_p">1.56510011366266e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n11" target="n42">
+      <data key="e_rho">0.70314073702032</data>
+      <data key="e_adjusted_p">9.90608190251178e-38</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n12" target="n17">
+      <data key="e_rho">0.643712516046668</data>
+      <data key="e_adjusted_p">1.09976613334656e-29</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n12" target="n20">
+      <data key="e_rho">0.612172971829753</data>
+      <data key="e_adjusted_p">3.86864526494744e-26</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n12" target="n22">
+      <data key="e_rho">0.628593786280635</data>
+      <data key="e_adjusted_p">5.89619593882994e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n12" target="n42">
+      <data key="e_rho">0.63955761247452</data>
+      <data key="e_adjusted_p">3.30452227742645e-29</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n13" target="n54">
+      <data key="e_rho">0.622616415280622</data>
+      <data key="e_adjusted_p">2.69879690309325e-27</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n14" target="n51">
+      <data key="e_rho">0.629475954726608</data>
+      <data key="e_adjusted_p">4.67617237560211e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n15" target="n55">
+      <data key="e_rho">0.633046503792433</data>
+      <data key="e_adjusted_p">1.85968819979876e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n16" target="n35">
+      <data key="e_rho">0.66638555658431</data>
+      <data key="e_adjusted_p">1.50925518664355e-32</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n16" target="n53">
+      <data key="e_rho">0.709001529386024</data>
+      <data key="e_adjusted_p">1.20766194701927e-38</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n17" target="n20">
+      <data key="e_rho">0.7400752113721</data>
+      <data key="e_adjusted_p">9.53409043129451e-44</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n17" target="n22">
+      <data key="e_rho">0.694191449548828</data>
+      <data key="e_adjusted_p">2.25174479515987e-36</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n17" target="n32">
+      <data key="e_rho">0.623445198014683</data>
+      <data key="e_adjusted_p">2.18951504262823e-27</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n17" target="n33">
+      <data key="e_rho">0.624131924634399</data>
+      <data key="e_adjusted_p">1.84816116926463e-27</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n17" target="n38">
+      <data key="e_rho">0.645289732150629</data>
+      <data key="e_adjusted_p">7.04836774312204e-30</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n17" target="n42">
+      <data key="e_rho">0.838313103865139</data>
+      <data key="e_adjusted_p">5.35410601586898e-67</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n17" target="n53">
+      <data key="e_rho">0.627004593630739</data>
+      <data key="e_adjusted_p">8.73084222122724e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n18" target="n40">
+      <data key="e_rho">0.651158336815918</data>
+      <data key="e_adjusted_p">1.38905814847407e-30</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n18" target="n43">
+      <data key="e_rho">0.663580091848599</data>
+      <data key="e_adjusted_p">3.38678707608569e-32</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n18" target="n46">
+      <data key="e_rho">0.756072219708562</data>
+      <data key="e_adjusted_p">1.46607556562908e-46</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n19" target="n56">
+      <data key="e_rho">0.639235986270807</data>
+      <data key="e_adjusted_p">3.57522687212509e-29</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n20" target="n22">
+      <data key="e_rho">0.714067664393679</data>
+      <data key="e_adjusted_p">2.01957949055785e-39</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n20" target="n29">
+      <data key="e_rho">0.647622992026696</data>
+      <data key="e_adjusted_p">3.71938503950849e-30</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n20" target="n31">
+      <data key="e_rho">0.690430165956084</data>
+      <data key="e_adjusted_p">7.69005247456643e-36</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n20" target="n32">
+      <data key="e_rho">0.71550022787595</data>
+      <data key="e_adjusted_p">1.31487425028169e-39</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n20" target="n38">
+      <data key="e_rho">0.661451706119604</data>
+      <data key="e_adjusted_p">6.46237474531258e-32</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n20" target="n39">
+      <data key="e_rho">0.642407334495092</data>
+      <data key="e_adjusted_p">1.55968921053601e-29</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n20" target="n42">
+      <data key="e_rho">0.745336908423084</data>
+      <data key="e_adjusted_p">1.2754688582193e-44</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n20" target="n57">
+      <data key="e_rho">0.606930092937705</data>
+      <data key="e_adjusted_p">1.45985681527258e-25</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n21" target="n58">
+      <data key="e_rho">0.656114650302443</data>
+      <data key="e_adjusted_p">3.22216848131078e-31</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n22" target="n27">
+      <data key="e_rho">0.681131480887424</data>
+      <data key="e_adjusted_p">1.53312020240068e-34</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n22" target="n29">
+      <data key="e_rho">0.664877878663323</data>
+      <data key="e_adjusted_p">2.33797828608462e-32</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n22" target="n31">
+      <data key="e_rho">0.707064026217685</data>
+      <data key="e_adjusted_p">2.4039573196309e-38</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n22" target="n32">
+      <data key="e_rho">0.685118286291917</data>
+      <data key="e_adjusted_p">4.29353055430339e-35</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n22" target="n38">
+      <data key="e_rho">0.639698342037328</data>
+      <data key="e_adjusted_p">3.21694845812364e-29</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n22" target="n39">
+      <data key="e_rho">0.670032479124118</data>
+      <data key="e_adjusted_p">5.11703233913632e-33</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n22" target="n42">
+      <data key="e_rho">0.745788712433763</data>
+      <data key="e_adjusted_p">1.17472089556697e-44</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n22" target="n53">
+      <data key="e_rho">0.625914907417215</data>
+      <data key="e_adjusted_p">1.16302097535328e-27</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n23" target="n59">
+      <data key="e_rho">0.627105802226112</data>
+      <data key="e_adjusted_p">8.58296362215997e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n24" target="n60">
+      <data key="e_rho">0.932718917003522</data>
+      <data key="e_adjusted_p">5.90237214650795e-114</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n25" target="n61">
+      <data key="e_rho">0.602337515252255</data>
+      <data key="e_adjusted_p">4.53007935424716e-25</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n26" target="n52">
+      <data key="e_rho">0.611802224068244</data>
+      <data key="e_adjusted_p">4.22041875492826e-26</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n27" target="n35">
+      <data key="e_rho">0.702013761697952</data>
+      <data key="e_adjusted_p">1.39707398823942e-37</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n27" target="n42">
+      <data key="e_rho">0.622459081593626</data>
+      <data key="e_adjusted_p">2.78782653348671e-27</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n27" target="n53">
+      <data key="e_rho">0.617718953067287</data>
+      <data key="e_adjusted_p">9.58082840519085e-27</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n28" target="n40">
+      <data key="e_rho">0.616765183210553</data>
+      <data key="e_adjusted_p">1.20918949466397e-26</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n28" target="n43">
+      <data key="e_rho">0.62562898019232</data>
+      <data key="e_adjusted_p">1.24414846346301e-27</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n28" target="n46">
+      <data key="e_rho">0.689342221078776</data>
+      <data key="e_adjusted_p">1.09043682000309e-35</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n29" target="n32">
+      <data key="e_rho">0.634936738699683</data>
+      <data key="e_adjusted_p">1.13523950893642e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n29" target="n42">
+      <data key="e_rho">0.646772727878966</data>
+      <data key="e_adjusted_p">4.63259813374501e-30</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n30" target="n37">
+      <data key="e_rho">0.623429673808801</data>
+      <data key="e_adjusted_p">2.18951504262823e-27</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n30" target="n40">
+      <data key="e_rho">0.702467126802034</data>
+      <data key="e_adjusted_p">1.22439679064751e-37</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n30" target="n43">
+      <data key="e_rho">0.741787833992026</data>
+      <data key="e_adjusted_p">5.44646865801847e-44</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n30" target="n46">
+      <data key="e_rho">0.68885623906755</data>
+      <data key="e_adjusted_p">1.25460427615631e-35</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n31" target="n32">
+      <data key="e_rho">0.675200121437809</data>
+      <data key="e_adjusted_p">1.02175870720094e-33</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n31" target="n42">
+      <data key="e_rho">0.62976562466914</data>
+      <data key="e_adjusted_p">4.36549379517764e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n32" target="n39">
+      <data key="e_rho">0.603508766741395</data>
+      <data key="e_adjusted_p">3.43642103882577e-25</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n32" target="n42">
+      <data key="e_rho">0.649910491934292</data>
+      <data key="e_adjusted_p">1.95004853624412e-30</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n33" target="n42">
+      <data key="e_rho">0.630198689139923</data>
+      <data key="e_adjusted_p">3.96226802644182e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n34" target="n40">
+      <data key="e_rho">0.687930153692351</data>
+      <data key="e_adjusted_p">1.68107200277437e-35</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n35" target="n53">
+      <data key="e_rho">0.691210802199014</data>
+      <data key="e_adjusted_p">6.03370116197947e-36</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n35" target="n47">
+      <data key="e_rho">0.614148632496478</data>
+      <data key="e_adjusted_p">2.35697860962718e-26</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n35" target="n62">
+      <data key="e_rho">0.63032747030323</data>
+      <data key="e_adjusted_p">3.86809640235894e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n36" target="n63">
+      <data key="e_rho">0.615481529284992</data>
+      <data key="e_adjusted_p">1.67861597368193e-26</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n37" target="n40">
+      <data key="e_rho">0.628144107643495</data>
+      <data key="e_adjusted_p">6.59877060990393e-28</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n37" target="n43">
+      <data key="e_rho">0.719560248638833</data>
+      <data key="e_adjusted_p">2.83706828026863e-40</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n37" target="n46">
+      <data key="e_rho">0.635580152249216</data>
+      <data key="e_adjusted_p">9.71048814468828e-29</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n38" target="n39">
+      <data key="e_rho">0.664799815222559</data>
+      <data key="e_adjusted_p">2.35177888148633e-32</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n38" target="n42">
+      <data key="e_rho">0.710854826042849</data>
+      <data key="e_adjusted_p">6.23561065044768e-39</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n39" target="n42">
+      <data key="e_rho">0.722855515383558</data>
+      <data key="e_adjusted_p">9.7247817828069e-41</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n40" target="n43">
+      <data key="e_rho">0.748894274259237</data>
+      <data key="e_adjusted_p">3.35484351561386e-45</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n40" target="n46">
+      <data key="e_rho">0.720055592788219</data>
+      <data key="e_adjusted_p">2.6083508001457e-40</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n41" target="n64">
+      <data key="e_rho">0.725843021947681</data>
+      <data key="e_adjusted_p">3.13371965955284e-41</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n42" target="n53">
+      <data key="e_rho">0.676544724470912</data>
+      <data key="e_adjusted_p">6.72032767148071e-34</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n42" target="n65">
+      <data key="e_rho">0.647884542175388</data>
+      <data key="e_adjusted_p">3.49782617916087e-30</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n43" target="n46">
+      <data key="e_rho">0.806530131116933</data>
+      <data key="e_adjusted_p">6.63885456409951e-58</data>
+      <data key="e_association">Positive</data>
+    </edge>
+    <edge source="n44" target="n66">
+      <data key="e_rho">0.636988224621004</data>
+      <data key="e_adjusted_p">6.69092656072578e-29</data>
+      <data key="e_association">Positive</data>
+    </edge>
+  </graph>
+</graphml>
