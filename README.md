@@ -359,12 +359,8 @@ PA_{ij}=
 
 Species prevalence was calculated as:
 
-\[
-Prevalence(\%)=
-\frac{\text{Number of samples containing the species}}
-{\text{Total number of samples in the group}}
-\times100
-\]
+<img width="551" height="59" alt="image" src="https://github.com/user-attachments/assets/d041319f-47c2-4370-adc1-d56f80a2bc40" />
+
 
 **3. Prevalence Filtering**
 
