@@ -271,7 +271,7 @@ To investigate differences in microbial community composition between samples an
 
 **1. Bray–Curtis Dissimilarity**
 
-Bray–Curtis dissimilarity was calculated to quantify differences in microbial community composition between pairs of samples.
+Bray–Curtis dissimilarity was calculated from the normalised species abundance profile (265 samples × 777 species) using `vegdist(method = "bray")`.
 
 \[
 BC_{ij}=
@@ -281,53 +281,69 @@ BC_{ij}=
 
 **2. Principal Coordinates Analysis (PCoA)**
 
-PCoA was performed using the Bray–Curtis dissimilarity matrix to visualize similarities and differences between microbial communities.
+PCoA was performed on the Bray–Curtis matrix using `cmdscale(k = 2, eig = TRUE)`. Variation explained was calculated as each eigenvalue divided by the sum of the positive eigenvalues (no negative-eigenvalue correction). Samples are coloured by study condition and shaped by age category.
 
 **3. PERMANOVA**
 
-Permutational Multivariate Analysis of Variance was performed using `adonis2()` from the `vegan` package.
+Performed with `adonis2()` from the `vegan` package (9,999 free permutations, `set.seed(123)`), using the model `distance ~ study_condition + age_category + gender`.
 
-The analysis evaluated the marginal contributions of:
-
-- Study condition
-- Age category
-- Gender
+- Primary analysis: marginal tests (`by = "margin"`), where each term is assessed after adjusting for the others.
+- Sequential tests (`by = "terms"`) were also run.
 
 **4. PERMDISP**
 
-Permutational analysis of multivariate dispersion was performed to assess whether within-group dispersion differed between Control and Diseased samples.
+Multivariate dispersion between Control and Diseased samples was assessed with `betadisper()` (spatial median) and tested with `permutest()` (9,999 permutations).
+
+**5. Alternative model specifications**
+
+Sensitivity of the PERMANOVA results was checked with:
+
+- Condition entered first (`study_condition + age_category + gender`)
+- Age category entered first (`age_category + study_condition + gender`)
+- Interaction model (`study_condition * age_category + gender`)
 
 ### PCoA Results
 
 | Axis | Variation Explained |
 |---|---:|
-| PCoA1 | 8.39% |
-| PCoA2 | 6.76% |
-| Combined | 15.15% |
+| PCo1 | 13.63% |
+| PCo2 | 11.15% |
+| Combined | 24.77% |
 
-### PERMANOVA Results
+### PERMANOVA Results (marginal)
 
-| Variable | R² | F-value | p-value |
+| Variable | Df | R² | F-value | p-value |
+|---|---:|---:|---:|---:|
+| Study condition | 1 | 0.01514 | 4.0865 | 0.0002 |
+| Age category | 2 | 0.01724 | 2.3274 | 0.0001 |
+| Gender | 1 | 0.00473 | 1.2760 | 0.1907 |
+
+Study condition and age category were significantly associated with community composition; gender was not. Each significant variable explained under 2% of the total variation.
+
+### Alternative Model Results
+
+| Term | Condition first (R² / p) | Age first (R² / p) | With interaction (R² / p) |
 |---|---:|---:|---:|
-| Study condition | 0.015136 | 4.086455 | 0.0001 |
-| Age category | 0.017241 | 2.327411 | 0.0008 |
-| Gender | 0.004726 | 1.275958 | 0.1808 |
+| Study condition | 0.01531 / 0.0001 | 0.01514 / 0.0001 | 0.01531 / 0.0001 |
+| Age category | 0.01693 / 0.0004 | 0.01710 / 0.0003 | 0.01693 / 0.0004 |
+| Gender | 0.00473 / 0.1901 | 0.00473 / 0.1901 | 0.00473 / 0.1907 |
+| Condition × age | – | – | 0.00635 / 0.6878 |
 
-The results indicate statistically significant associations between microbial community composition and study condition and age category. Gender was not statistically significant.
+Conclusions were unchanged by term order, and no condition × age interaction was detected.
 
 ### PERMDISP Results
 
+- Mean distance to median: Control 0.391, Diseased 0.431
 - F-value: **15.007**
 - p-value: **0.0002**
 
-The significant PERMDISP result indicates that within-group dispersion differed between Control and Diseased samples. Therefore, PERMANOVA findings should be interpreted cautiously because differences in dispersion may contribute to the observed group differences.
+Diseased samples were significantly more dispersed than Controls. The PERMANOVA result for study condition should therefore be interpreted cautiously, as differences in dispersion may contribute to it.
 
 ### Visualizations
 
-- Bray–Curtis PCoA plot.
-- Dispersion plot.
-- PERMANOVA statistical summary.
-- PERMDISP results.
+- `pcoa_bray_curtis.png`: Bray–Curtis PCoA plot
+- `multivariate_dispersion_study.png`: dispersion plot
+- Variance explained (R²) bar chart, generated in the script
 
 ### Output Directory
 
