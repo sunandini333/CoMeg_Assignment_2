@@ -1,0 +1,36 @@
+
+	Homogeneity of multivariate dispersions
+
+Call: betadisper(d = bc_dist, group = meta$study_condition, type =
+"median")
+
+No. of Positive Eigenvalues: 130
+No. of Negative Eigenvalues: 134
+
+Average distance to median:
+ Control Diseased 
+  0.3907   0.4315 
+
+Eigenvalues for PCoA axes:
+(Showing 8 of 264 eigenvalues)
+PCoA1 PCoA2 PCoA3 PCoA4 PCoA5 PCoA6 PCoA7 PCoA8 
+7.654 6.261 4.509 2.788 2.242 2.027 1.581 1.500 
+Analysis of Variance Table
+
+Response: Distances
+           Df  Sum Sq  Mean Sq F value    Pr(>F)    
+Groups      1 0.11018 0.110183  15.007 0.0001353 ***
+Residuals 263 1.93096 0.007342                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Permutation test for homogeneity of multivariate dispersions
+Permutation: free
+Number of permutations: 9999
+
+Response: Distances
+           Df  Sum Sq  Mean Sq      F N.Perm Pr(>F)    
+Groups      1 0.11018 0.110183 15.007   9999  2e-04 ***
+Residuals 263 1.93096 0.007342                         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
