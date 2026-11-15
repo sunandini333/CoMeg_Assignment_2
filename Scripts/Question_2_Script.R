@@ -1,873 +1,295 @@
-setwd("C:/SUNANDINI/Projects/Comeg_ass_2")
-# ============================================================
-# QUESTION 2: MICROBIAL BETA DIVERSITY ANALYSIS
-#
-# 1. Bray-Curtis dissimilarity
-# 2. Principal Coordinates Analysis (PCoA)
-# 3. PERMANOVA
-# 4. PERMDISP (multivariate dispersion)
-# 5. Alternative PERMANOVA model specification
-# 6. Identify strongest metadata association
-# ============================================================
+setwd("/home/chila/IIITD/Sem_01/COMEG/Assignment_02")
 
-
-# ------------------------------------------------------------
-# 1. INSTALL AND LOAD PACKAGES
-# ------------------------------------------------------------
-
-packages <- c(
-  "tidyverse",
-  "vegan",
-  "permute",
-  "ggplot2"
-)
-
-for (pkg in packages) {
-  if (!requireNamespace(pkg, quietly = TRUE)) {
-    install.packages(pkg)
-  }
-}
-
-library(tidyverse)
+library(readxl)
 library(vegan)
-library(permute)
 library(ggplot2)
 
+# Load data
+species_raw <- read_excel("species_profile_norm.xlsx")
+meta <- read_excel("metadata_all.xlsx")
 
-# ------------------------------------------------------------
-# 2. CREATE OUTPUT DIRECTORY
-# ------------------------------------------------------------
+# Prepare species abundance matrix
+species_mat <- as.matrix(species_raw[, -1])
+storage.mode(species_mat) <- "numeric"
+rownames(species_mat) <- species_raw[[1]]
 
-dir.create(
-  "Question2_Results",
-  showWarnings = FALSE
+# Match metadata to the sample order
+meta <- as.data.frame(meta)
+rownames(meta) <- meta$sample_id
+meta <- meta[rownames(species_mat), ]
+
+stopifnot(identical(rownames(species_mat), meta$sample_id))
+
+# Set metadata factors
+meta$study_condition <- factor(
+  meta$study_condition,
+  levels = c("Control", "Diseased")
 )
 
-
-# ------------------------------------------------------------
-# 3. LOAD DATASETS
-# ------------------------------------------------------------
-
-metadata <- read.csv(
-  "metadata_all.xlsx.csv",
-  check.names = FALSE,
-  stringsAsFactors = FALSE
+meta$age_category <- factor(
+  meta$age_category,
+  levels = c("young", "middle age", "senior")
 )
 
-species_profile <- read.csv(
-  "species_profile_norm.xlsx.csv",
-  check.names = FALSE,
-  stringsAsFactors = FALSE
+meta$gender <- factor(meta$gender)
+
+# Check for missing values
+stopifnot(!anyNA(species_mat))
+stopifnot(!anyNA(meta[, c("study_condition", "age_category", "gender")]))
+
+# i. Bray-Curtis dissimilarity and PCoA
+
+bc_dist <- vegdist(species_mat, method = "bray")
+
+pcoa_res <- cmdscale(bc_dist, k = 2, eig = TRUE)
+
+# Calculate the percentage of variation explained
+pos_eig <- pcoa_res$eig[pcoa_res$eig > 0]
+var_explained <- pos_eig / sum(pos_eig) * 100
+
+cat(sprintf("PCo1: %.2f%%\n", var_explained[1]))
+cat(sprintf("PCo2: %.2f%%\n", var_explained[2]))
+cat(sprintf("Combined: %.2f%%\n", sum(var_explained[1:2])))
+
+# Prepare plotting data
+pcoa_df <- data.frame(
+  sample_id = rownames(pcoa_res$points),
+  PCo1 = pcoa_res$points[, 1],
+  PCo2 = pcoa_res$points[, 2],
+  study_condition = meta$study_condition,
+  age_category = meta$age_category,
+  gender = meta$gender
 )
 
-# Rename first species profile column
-colnames(species_profile)[1] <- "sample_id"
-
-# Convert sample IDs to character
-metadata$sample_id <- as.character(metadata$sample_id)
-
-species_profile$sample_id <- as.character(
-  species_profile$sample_id
-)
-
-# Check duplicate sample IDs
-if (anyDuplicated(metadata$sample_id)) {
-  stop("Duplicate sample IDs found in metadata.")
-}
-
-if (anyDuplicated(species_profile$sample_id)) {
-  stop("Duplicate sample IDs found in species profile.")
-}
-
-
-# ------------------------------------------------------------
-# 4. MATCH SAMPLE IDS
-# ------------------------------------------------------------
-
-common_samples <- intersect(
-  metadata$sample_id,
-  species_profile$sample_id
-)
-
-cat(
-  "Number of common samples:",
-  length(common_samples),
-  "\n"
-)
-
-# Keep common samples in identical order
-metadata <- metadata %>%
-  filter(sample_id %in% common_samples) %>%
-  arrange(match(sample_id, common_samples))
-
-species_profile <- species_profile %>%
-  filter(sample_id %in% common_samples) %>%
-  arrange(match(sample_id, common_samples))
-
-stopifnot(
-  identical(
-    metadata$sample_id,
-    species_profile$sample_id
-  )
-)
-
-
-# ------------------------------------------------------------
-# 5. PREPARE SPECIES ABUNDANCE MATRIX
-# ------------------------------------------------------------
-
-species_matrix <- species_profile %>%
-  select(-sample_id) %>%
-  mutate(
-    across(
-      everything(),
-      ~ as.numeric(as.character(.x))
-    )
-  ) %>%
-  as.matrix()
-
-rownames(species_matrix) <- species_profile$sample_id
-
-# Check invalid values
-if (
-  anyNA(species_matrix) ||
-  any(!is.finite(species_matrix))
-) {
-  stop("Species matrix contains NA, NaN or Inf.")
-}
-
-if (any(species_matrix < 0)) {
-  stop("Negative abundance values detected.")
-}
-
-# Remove species with zero abundance across all samples
-species_matrix <- species_matrix[
-  ,
-  colSums(species_matrix) > 0,
-  drop = FALSE
-]
-
-cat(
-  "Number of species retained:",
-  ncol(species_matrix),
-  "\n"
-)
-
-# Remove samples with zero total abundance
-valid_samples <- rownames(species_matrix)[
-  rowSums(species_matrix) > 0
-]
-
-species_matrix <- species_matrix[
-  valid_samples,
-  ,
-  drop = FALSE
-]
-
-metadata <- metadata %>%
-  filter(sample_id %in% valid_samples) %>%
-  arrange(match(sample_id, valid_samples))
-
-
-# ------------------------------------------------------------
-# 6. PREPARE METADATA
-# ------------------------------------------------------------
-
-# Convert metadata variables to factors
-metadata$study_condition <- factor(
-  metadata$study_condition
-)
-
-metadata$age_category <- factor(
-  metadata$age_category
-)
-
-metadata$gender <- factor(
-  metadata$gender
-)
-
-# Retain samples with complete metadata
-metadata <- metadata %>%
-  filter(
-    complete.cases(
-      study_condition,
-      age_category,
-      gender
-    )
-  )
-
-# Keep species matrix in identical order
-species_matrix <- species_matrix[
-  metadata$sample_id,
-  ,
-  drop = FALSE
-]
-
-metadata <- droplevels(metadata)
-
-cat("\nFINAL DATA DIMENSIONS:\n")
-cat("Samples:", nrow(species_matrix), "\n")
-cat("Species:", ncol(species_matrix), "\n")
-
-cat("\nStudy condition distribution:\n")
-print(table(metadata$study_condition))
-
-cat("\nAge category distribution:\n")
-print(table(metadata$age_category))
-
-cat("\nGender distribution:\n")
-print(table(metadata$gender))
-
-write.csv(
-  metadata,
-  "Question2_Results/Final_Analysis_Metadata.csv",
-  row.names = FALSE
-)
-
-
-# ============================================================
-# QUESTION 2(i): BRAY-CURTIS AND PCoA
-# ============================================================
-
-
-# ------------------------------------------------------------
-# 7. CALCULATE BRAY-CURTIS DISSIMILARITY
-# ------------------------------------------------------------
-
-# Bray-Curtis dissimilarity
-bray_dist <- vegan::vegdist(
-  species_matrix,
-  method = "bray"
-)
-
-cat("\nBRAY-CURTIS DISTANCE MATRIX:\n")
-
-print(bray_dist)
-
-# Convert distance object into a full matrix
-bray_matrix <- as.matrix(bray_dist)
-
-# Save distance matrix
-write.csv(
-  bray_matrix,
-  "Question2_Results/Bray_Curtis_Distance_Matrix.csv"
-)
-
-
-# ------------------------------------------------------------
-# 8. PRINCIPAL COORDINATES ANALYSIS (PCoA)
-# ------------------------------------------------------------
-
-# Classical multidimensional scaling
-# Cailliez correction is applied for negative eigenvalues
-
-pcoa_result <- cmdscale(
-  bray_dist,
-  k = 2,
-  eig = TRUE,
-  add = TRUE
-)
-
-# Extract coordinates
-pcoa_coordinates <- as.data.frame(
-  pcoa_result$points
-)
-
-colnames(pcoa_coordinates) <- c(
-  "PCoA1",
-  "PCoA2"
-)
-
-rownames(pcoa_coordinates) <- rownames(bray_matrix)
-
-# Calculate percentage variation
-positive_eigenvalues <- pcoa_result$eig[
-  pcoa_result$eig > 0
-]
-
-PCoA1_percent <- (
-  positive_eigenvalues[1] /
-    sum(positive_eigenvalues)
-) * 100
-
-PCoA2_percent <- (
-  positive_eigenvalues[2] /
-    sum(positive_eigenvalues)
-) * 100
-
-cat("\nPCoA VARIANCE EXPLAINED:\n")
-
-cat(
-  "PCoA1:",
-  round(PCoA1_percent, 2),
-  "%\n"
-)
-
-cat(
-  "PCoA2:",
-  round(PCoA2_percent, 2),
-  "%\n"
-)
-
-cat(
-  "Total variation represented by first two axes:",
-  round(PCoA1_percent + PCoA2_percent, 2),
-  "%\n"
-)
-
-
-# ------------------------------------------------------------
-# 9. COMBINE PCoA COORDINATES WITH METADATA
-# ------------------------------------------------------------
-
-pcoa_coordinates$sample_id <- rownames(
-  pcoa_coordinates
-)
-
-pcoa_data <- pcoa_coordinates %>%
-  left_join(
-    metadata,
-    by = "sample_id"
-  )
-
-write.csv(
-  pcoa_data,
-  "Question2_Results/PCoA_Coordinates.csv",
-  row.names = FALSE
-)
-
-
-# ------------------------------------------------------------
-# 10. CREATE PCoA PLOT
-# ------------------------------------------------------------
-
-# Colour = Study condition
-# Shape = Age category
-
+# PCoA plot
 pcoa_plot <- ggplot(
-  pcoa_data,
+  pcoa_df,
   aes(
-    x = PCoA1,
-    y = PCoA2,
+    x = PCo1,
+    y = PCo2,
     color = study_condition,
     shape = age_category
   )
 ) +
-  
-  geom_point(
-    size = 3,
-    alpha = 0.8
+  geom_hline(yintercept = 0, linetype = "dashed",
+             color = "grey70", linewidth = 0.4) +
+  geom_vline(xintercept = 0, linetype = "dashed",
+             color = "grey70", linewidth = 0.4) +
+  geom_point(size = 2.8, alpha = 0.85) +
+  scale_color_manual(
+    values = c("Control" = "#1f77b4", "Diseased" = "#d62728")
   ) +
-  
+  scale_shape_manual(
+    values = c("young" = 16, "middle age" = 15, "senior" = 17)
+  ) +
   labs(
-    title = "PCoA of Microbial Community Composition",
-    subtitle = "Bray-Curtis dissimilarity",
-    x = paste0(
-      "PCoA1 (",
-      round(PCoA1_percent, 2),
-      "%)"
-    ),
-    y = paste0(
-      "PCoA2 (",
-      round(PCoA2_percent, 2),
-      "%)"
-    ),
+    title = "PCoA of Bray-Curtis Dissimilarity Across Individuals",
+    x = sprintf("PCo1 (%.2f%%)", var_explained[1]),
+    y = sprintf("PCo2 (%.2f%%)", var_explained[2]),
     color = "Study Condition",
     shape = "Age Category"
   ) +
-  
-  theme_classic(base_size = 13) +
-  
+  theme_bw(base_size = 12) +
   theme(
-    plot.title = element_text(
-      face = "bold",
-      size = 15
-    ),
-    legend.position = "right"
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    panel.grid.minor = element_blank()
   )
 
 print(pcoa_plot)
 
 ggsave(
-  "Question2_Results/PCoA_BrayCurtis.png",
-  pcoa_plot,
-  width = 9,
-  height = 7,
-  dpi = 300
-)
-
-
-# ============================================================
-# QUESTION 2(ii): PRIMARY PERMANOVA
-# ============================================================
-
-
-# ------------------------------------------------------------
-# 11. GENERATE A COMMON PERMUTATION MATRIX
-# ------------------------------------------------------------
-
-# Use the same permutations for all analyses
-# to ensure a fair comparison.
-
-set.seed(123)
-
-n_permutations <- 9999
-
-permutation_matrix <- permute::shuffleSet(
-  n = nrow(metadata),
-  nset = n_permutations,
-  control = permute::how()
-)
-
-cat(
-  "\nNumber of permutations:",
-  nrow(permutation_matrix),
-  "\n"
-)
-
-# Strategy:
-# Unrestricted permutation of sample labels.
-# This assumes all samples are independent.
-
-
-# ------------------------------------------------------------
-# 12. PRIMARY PERMANOVA: MARGINAL EFFECTS
-# ------------------------------------------------------------
-
-# by = "margin" estimates the marginal association
-# of each variable after adjusting for other variables.
-
-permanova_primary <- vegan::adonis2(
-  bray_dist ~ study_condition +
-    age_category +
-    gender,
-  data = metadata,
-  permutations = permutation_matrix,
-  by = "margin"
-)
-
-cat("\nPRIMARY PERMANOVA RESULTS:\n")
-
-print(permanova_primary)
-
-
-# ------------------------------------------------------------
-# 13. EXTRACT PERMANOVA RESULTS
-# ------------------------------------------------------------
-
-primary_results <- as.data.frame(
-  permanova_primary
-)
-
-primary_results$Variable <- rownames(
-  primary_results
-)
-
-primary_results <- primary_results %>%
-  filter(
-    Variable %in% c(
-      "study_condition",
-      "age_category",
-      "gender"
-    )
-  ) %>%
-  select(
-    Variable,
-    Df,
-    SumOfSqs,
-    R2,
-    F,
-    `Pr(>F)`
-  ) %>%
-  arrange(desc(R2))
-
-cat("\nPRIMARY PERMANOVA SUMMARY:\n")
-
-print(primary_results)
-
-write.csv(
-  primary_results,
-  "Question2_Results/Primary_PERMANOVA_Marginal.csv",
-  row.names = FALSE
-)
-
-
-# ============================================================
-# QUESTION 2(iii): MULTIVARIATE DISPERSION
-# ============================================================
-
-
-# ------------------------------------------------------------
-# 14. TEST DISPERSION BETWEEN CONTROL AND DISEASED
-# ------------------------------------------------------------
-
-# betadisper measures the distance of samples
-# from their group centroid (spatial median here).
-
-dispersion_model <- vegan::betadisper(
-  bray_dist,
-  group = metadata$study_condition,
-  type = "median"
-)
-
-# Permutation-based test
-dispersion_test <- vegan::permutest(
-  dispersion_model,
-  permutations = permutation_matrix,
-  pairwise = TRUE
-)
-
-cat("\nPERMDISP RESULTS:\n")
-
-print(dispersion_test)
-
-
-
-# ------------------------------------------------------------
-# 15. SAVE DISPERSION RESULTS
-# ------------------------------------------------------------
-
-dispersion_output <- data.frame(
-  sample_id = metadata$sample_id,
-  
-  study_condition = as.character(
-    dispersion_model$group
-  ),
-  
-  Distance_to_Centroid = as.numeric(
-    dispersion_model$distances
-  )
-)
-
-# Check dimensions
-cat("Dispersion output dimensions:\n")
-print(dim(dispersion_output))
-
-# Check group distribution
-print(
-  table(dispersion_output$study_condition)
-)
-
-# Save results
-write.csv(
-  dispersion_output,
-  "Question2_Results/Dispersion_Distances.csv",
-  row.names = FALSE
-)
-
-# Save permutation test results
-capture.output(
-  print(dispersion_test),
-  file = "Question2_Results/Dispersion_Test.txt"
-)
-
-cat("Dispersion results saved successfully.\n")
-
-
-# ------------------------------------------------------------
-# 16. VISUALIZE MULTIVARIATE DISPERSION
-# ------------------------------------------------------------
-
-dispersion_plot <- ggplot(
-  dispersion_output,
-  aes(
-    x = study_condition,
-    y = Distance_to_Centroid,
-    fill = study_condition
-  )
-) +
-  
-  geom_boxplot(
-    alpha = 0.65,
-    outlier.shape = NA
-  ) +
-  
-  geom_jitter(
-    width = 0.15,
-    alpha = 0.5,
-    size = 1.5
-  ) +
-  
-  labs(
-    title = "Multivariate Dispersion Across Study Conditions",
-    subtitle = "Distance from group spatial median",
-    x = "Study Condition",
-    y = "Bray-Curtis Distance to Group Median"
-  ) +
-  
-  theme_classic(base_size = 13)
-
-print(dispersion_plot)
-
-ggsave(
-  "Question2_Results/Dispersion_Plot.png",
-  dispersion_plot,
+  "pcoa_bray_curtis.png",
+  plot = pcoa_plot,
   width = 8,
   height = 6,
   dpi = 300
 )
 
 
-# ============================================================
-# QUESTION 2(iv): ALTERNATIVE PERMANOVA
-# ============================================================
+# ii. PERMANOVA
 
+set.seed(123)
 
-# ------------------------------------------------------------
-# 17. ALTERNATIVE MODEL: DIFFERENT TERM ORDER
-# ------------------------------------------------------------
-
-# Primary analysis:
-# study_condition -> age_category -> gender
-#
-# Alternative analysis:
-# age_category -> gender -> study_condition
-#
-# Sequential PERMANOVA assigns explained variation
-# according to the order of terms.
-
-permanova_alternative <- vegan::adonis2(
-  bray_dist ~ age_category +
-    gender +
-    study_condition,
-  data = metadata,
-  permutations = permutation_matrix,
+# Sequential tests
+permanova_seq <- adonis2(
+  bc_dist ~ study_condition + age_category + gender,
+  data = meta,
+  permutations = 9999,
   by = "terms"
 )
 
-cat("\nALTERNATIVE SEQUENTIAL PERMANOVA:\n")
+print(permanova_seq)
 
-print(permanova_alternative)
+# Marginal tests
+permanova_margin <- adonis2(
+  bc_dist ~ study_condition + age_category + gender,
+  data = meta,
+  permutations = 9999,
+  by = "margin"
+)
+
+print(permanova_margin)
 
 
-# ------------------------------------------------------------
-# 18. ANOTHER SEQUENTIAL MODEL: CONDITION FIRST
-# ------------------------------------------------------------
+# iii. Multivariate dispersion
 
-permanova_sequential_primary <- vegan::adonis2(
-  bray_dist ~ study_condition +
-    age_category +
-    gender,
-  data = metadata,
-  permutations = permutation_matrix,
+set.seed(123)
+
+disp_condition <- betadisper(
+  bc_dist,
+  group = meta$study_condition,
+  type = "median"
+)
+
+print(disp_condition)
+
+# Compare distances between groups
+disp_mean <- tapply(
+  disp_condition$distances,
+  meta$study_condition,
+  mean
+)
+
+disp_sd <- tapply(
+  disp_condition$distances,
+  meta$study_condition,
+  sd
+)
+
+print(disp_mean)
+print(disp_sd)
+
+# Test differences in dispersion
+anova(disp_condition)
+
+set.seed(123)
+
+permutest_condition <- permutest(
+  disp_condition,
+  permutations = 9999
+)
+
+print(permutest_condition)
+
+# Plot dispersion
+disp_df <- data.frame(
+  study_condition = disp_condition$group,
+  Distance_to_Centroid = disp_condition$distances
+)
+
+bp1 <- ggplot(
+  disp_df,
+  aes(
+    x = study_condition,
+    y = Distance_to_Centroid,
+    fill = study_condition
+  )
+) +
+  geom_boxplot(alpha = 0.65, outlier.shape = NA) +
+  geom_jitter(width = 0.15, alpha = 0.5, size = 1.5) +
+  scale_fill_manual(
+    values = c("Control" = "#1f77b4", "Diseased" = "#d62728")
+  ) +
+  labs(
+    title = "Multivariate Dispersion by Study Condition",
+    x = "Study Condition",
+    y = "Distance to Spatial Median"
+  ) +
+  theme_classic(base_size = 13) +
+  theme(legend.position = "none")
+
+print(bp1)
+
+ggsave(
+  "multivariate_dispersion_study.png",
+  plot = bp1,
+  width = 8,
+  height = 6,
+  dpi = 300
+)
+
+
+# iv. Alternative model specifications
+# 
+# Primary model
+set.seed(123)
+
+perm_primary <- adonis2(
+  bc_dist ~ study_condition + age_category + gender,
+  data = meta,
+  permutations = 9999,
   by = "terms"
 )
 
-cat("\nPRIMARY ORDER SEQUENTIAL PERMANOVA:\n")
+# Alternative model: Age category entered first
+set.seed(123)
 
-print(permanova_sequential_primary)
-
-
-# ------------------------------------------------------------
-# 19. EXTRACT ALTERNATIVE RESULTS
-# ------------------------------------------------------------
-
-alternative_results <- as.data.frame(
-  permanova_alternative
+perm_alt_order <- adonis2(
+  bc_dist ~ age_category + study_condition + gender,
+  data = meta,
+  permutations = 9999,
+  by = "terms"
 )
 
-alternative_results$Variable <- rownames(
-  alternative_results
+print(perm_alt_order)
+
+# Alternative model: Include an interaction between disease status and age
+set.seed(123)
+
+perm_interaction <- adonis2(
+  bc_dist ~ study_condition * age_category + gender,
+  data = meta,
+  permutations = 9999,
+  by = "terms"
 )
 
-alternative_results <- alternative_results %>%
-  filter(
-    Variable %in% c(
-      "study_condition",
-      "age_category",
-      "gender"
-    )
-  ) %>%
-  select(
-    Variable,
-    Df,
-    SumOfSqs,
-    R2,
-    F,
-    `Pr(>F)`
+print(perm_interaction)
+
+
+# v. Compare variance explained by metadata variables
+
+es_primary <- as.data.frame(
+  perm_primary[1:3, c("Df", "SumOfSqs", "R2", "F", "Pr(>F)")]
+)
+
+es_primary$Variable <- rownames(es_primary)
+es_primary$R2_percent <- es_primary$R2 * 100
+
+# Rank variables by their R2 values
+es_ranked <- es_primary[
+  order(-es_primary$R2),
+  c("Variable", "Df", "R2", "R2_percent", "F", "Pr(>F)")
+]
+
+print(es_ranked, row.names = FALSE)
+
+# Plot R2 values
+es_plot <- ggplot(
+  es_ranked,
+  aes(
+    x = reorder(Variable, R2_percent),
+    y = R2_percent,
+    fill = Variable
+  )
+) +
+  geom_col(width = 0.55, show.legend = FALSE) +
+  geom_text(
+    aes(label = sprintf("%.2f%% (p = %.4f)", R2_percent, `Pr(>F)`)),
+    vjust = -0.4,
+    size = 3.8
+  ) +
+  scale_y_continuous(
+    limits = c(0, max(es_ranked$R2_percent) * 1.2),
+    expand = expansion(mult = c(0, 0.02))
+  ) +
+  labs(
+    title = "Variance Explained by Metadata Variables",
+    x = "Metadata Variable",
+    y = "Variance Explained (R2, %)"
+  ) +
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5)
   )
 
-write.csv(
-  alternative_results,
-  "Question2_Results/Alternative_PERMANOVA.csv",
-  row.names = FALSE
-)
-
-
-# ------------------------------------------------------------
-# 20. COMPARE SEQUENTIAL MODEL ORDERS
-# ------------------------------------------------------------
-
-sequential_primary <- as.data.frame(
-  permanova_sequential_primary
-)
-
-sequential_primary$Variable <- rownames(
-  sequential_primary
-)
-
-sequential_primary <- sequential_primary %>%
-  filter(
-    Variable %in% c(
-      "study_condition",
-      "age_category",
-      "gender"
-    )
-  ) %>%
-  select(
-    Variable,
-    Primary_R2 = R2,
-    Primary_F = F,
-    Primary_p = `Pr(>F)`
-  )
-
-sequential_alternative <- as.data.frame(
-  permanova_alternative
-)
-
-sequential_alternative$Variable <- rownames(
-  sequential_alternative
-)
-
-sequential_alternative <- sequential_alternative %>%
-  filter(
-    Variable %in% c(
-      "study_condition",
-      "age_category",
-      "gender"
-    )
-  ) %>%
-  select(
-    Variable,
-    Alternative_R2 = R2,
-    Alternative_F = F,
-    Alternative_p = `Pr(>F)`
-  )
-
-model_comparison <- full_join(
-  sequential_primary,
-  sequential_alternative,
-  by = "Variable"
-)
-
-cat("\nSEQUENTIAL MODEL COMPARISON:\n")
-
-print(model_comparison)
-
-write.csv(
-  model_comparison,
-  "Question2_Results/Sequential_Model_Comparison.csv",
-  row.names = FALSE
-)
-
-
-# ============================================================
-# QUESTION 2(v): STRONGEST METADATA ASSOCIATION
-# ============================================================
-
-
-# ------------------------------------------------------------
-# 21. IDENTIFY STRONGEST ASSOCIATION
-# ------------------------------------------------------------
-
-# Use marginal PERMANOVA R-squared values
-# to compare adjusted effect sizes.
-
-strongest_variable <- primary_results %>%
-  arrange(desc(R2)) %>%
-  slice(1)
-
-cat("\nSTRONGEST METADATA ASSOCIATION:\n")
-
-print(strongest_variable)
-
-cat(
-  "\nVariable:",
-  strongest_variable$Variable,
-  "\n"
-)
-
-cat(
-  "Marginal R-squared:",
-  round(strongest_variable$R2, 4),
-  "\n"
-)
-
-cat(
-  "Pseudo-F:",
-  round(strongest_variable$F, 4),
-  "\n"
-)
-
-cat(
-  "Permutation p-value:",
-  strongest_variable$`Pr(>F)`,
-  "\n"
-)
-
-
-# ------------------------------------------------------------
-# 22. SAVE STRONGEST ASSOCIATION
-# ------------------------------------------------------------
-
-write.csv(
-  strongest_variable,
-  "Question2_Results/Strongest_Metadata_Association.csv",
-  row.names = FALSE
-)
-
-
-# ============================================================
-# 23. SAVE ALL RESULTS IN ONE TEXT FILE
-# ============================================================
-
-capture.output(
-  {
-    cat("====================================\n")
-    cat("QUESTION 2: BETA DIVERSITY ANALYSIS\n")
-    cat("====================================\n")
-    
-    cat("\nSAMPLE SIZE:\n")
-    print(nrow(metadata))
-    
-    cat("\nSPECIES COUNT:\n")
-    print(ncol(species_matrix))
-    
-    cat("\nPCoA VARIATION:\n")
-    print(PCoA1_percent)
-    print(PCoA2_percent)
-    
-    cat("\nPRIMARY MARGINAL PERMANOVA:\n")
-    print(permanova_primary)
-    
-    cat("\nPRIMARY SEQUENTIAL PERMANOVA:\n")
-    print(permanova_sequential_primary)
-    
-    cat("\nALTERNATIVE SEQUENTIAL PERMANOVA:\n")
-    print(permanova_alternative)
-    
-    cat("\nPERMDISP:\n")
-    print(dispersion_test)
-    
-    cat("\nMODEL COMPARISON:\n")
-    print(model_comparison)
-    
-    cat("\nSTRONGEST ASSOCIATION:\n")
-    print(strongest_variable)
-    
-  },
-  file = "Question2_Results/Complete_Statistical_Results.txt"
-)
-
-
-# ------------------------------------------------------------
-# 24. COMPLETION MESSAGE
-# ------------------------------------------------------------
-
-cat("\n============================================\n")
-cat("QUESTION 2 ANALYSIS COMPLETED SUCCESSFULLY\n")
-cat("============================================\n")
-
-cat("\nAll output files are saved in:\n")
-cat("Question2_Results/\n")
-
+print(es_plot)
