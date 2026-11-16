@@ -273,12 +273,6 @@ To investigate differences in microbial community composition between samples an
 
 Bray–Curtis dissimilarity was calculated from the normalised species abundance profile (265 samples × 777 species) using `vegdist(method = "bray")`.
 
-\[
-BC_{ij}=
-\frac{\sum_k|x_{ik}-x_{jk}|}
-{\sum_k(x_{ik}+x_{jk})}
-\]
-
 **2. Principal Coordinates Analysis (PCoA)**
 
 PCoA was performed on the Bray–Curtis matrix using `cmdscale(k = 2, eig = TRUE)`. Variation explained was calculated as each eigenvalue divided by the sum of the positive eigenvalues (no negative-eigenvalue correction). Samples are coloured by study condition and shaped by age category.
