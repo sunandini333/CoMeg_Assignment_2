@@ -464,13 +464,10 @@ P-values from pairwise correlations were adjusted using the Benjamini–Hochberg
 
 An association was included as an edge if it satisfied both conditions:
 
-\[
-|\rho|\geq0.60
-\]
+An association was included as an edge if it satisfied both of the following criteria:
 
-\[
-Adjusted\ p\text{-value}<0.05
-\]
+- Absolute correlation coefficient (|rho|) >= 0.60
+- Adjusted p-value < 0.05
 
 An undirected network was constructed using the `igraph` package.
 
