@@ -426,6 +426,8 @@ Prevalence differences were moderately and positively associated with mean abund
 - `Top_6_Species_Prevalence.png`: Control vs Diseased prevalence for the top 3 positive and top 3 negative species.
 - `Top_40_Prevalence_Differences.png`: 20 largest positive and 20 largest negative prevalence differences.
 - `Prevalence_vs_Mean_Abundance.png`: prevalence difference vs mean abundance difference.
+- - `Prevalence_Difference.png`: prevalence difference (pp) for the part (iii) species and the overall top 3 each way, coloured by FDR significance and labelled with pp and q-value.
+- `Selected_Species_Comparison.png`: prevalence vs mean abundance for *Clostridium_aminobutyricum* (largest shift) and *Streptococcus_sinensis* (prevalence and abundance disagree).
 
 ### Output Directory
 
