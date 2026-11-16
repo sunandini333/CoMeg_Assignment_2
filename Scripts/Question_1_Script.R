@@ -1,14 +1,6 @@
 setwd("C:/SUNANDINI/Projects/Comeg_ass_2")
 
-
-# ============================================================
-# QUESTION 1: MICROBIAL ALPHA DIVERSITY ANALYSIS
-# Shannon Diversity and Pielou's Evenness
-# ============================================================
-
-# ------------------------------------------------------------
-# 1. INSTALL AND LOAD REQUIRED PACKAGES
-# ------------------------------------------------------------
+# Ques1: microbial alpha diversity analysis
 
 packages <- c(
   "tidyverse",
@@ -17,6 +9,8 @@ packages <- c(
   "car",
   "ggpubr"
 )
+
+# preparing and loading env
 
 for (pkg in packages) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
@@ -30,10 +24,7 @@ library(rstatix)
 library(car)
 library(ggpubr)
 
-# ------------------------------------------------------------
-# 2. READ THE DATA
-# ------------------------------------------------------------
-
+#Loading data
 metadata <- read.csv(
   "metadata_all.xlsx.csv",
   check.names = FALSE,
@@ -46,25 +37,17 @@ species_profile <- read.csv(
   stringsAsFactors = FALSE
 )
 
-# Output directory
+#out dir
 dir.create("Question1_Results", showWarnings = FALSE)
 
-# ------------------------------------------------------------
-# 3. MATCH SAMPLE IDS BETWEEN THE TWO DATASETS
-# ------------------------------------------------------------
-
-# Rename first column of species profile as sample_id
 colnames(species_profile)[1] <- "sample_id"
 
-# Ensure sample IDs are character
 metadata$sample_id <- as.character(metadata$sample_id)
 species_profile$sample_id <- as.character(species_profile$sample_id)
 
-# Check duplicate sample IDs
 stopifnot(!anyDuplicated(metadata$sample_id))
 stopifnot(!anyDuplicated(species_profile$sample_id))
 
-# Identify common samples
 common_samples <- intersect(
   metadata$sample_id,
   species_profile$sample_id
@@ -72,7 +55,6 @@ common_samples <- intersect(
 
 cat("Common samples:", length(common_samples), "\n")
 
-# Retain common samples and maintain identical ordering
 metadata <- metadata %>%
   filter(sample_id %in% common_samples) %>%
   arrange(match(sample_id, common_samples))
@@ -81,15 +63,11 @@ species_profile <- species_profile %>%
   filter(sample_id %in% common_samples) %>%
   arrange(match(sample_id, common_samples))
 
-# Check sample ordering
 stopifnot(
   identical(metadata$sample_id, species_profile$sample_id)
 )
 
-# ------------------------------------------------------------
-# 4. PREPARE SPECIES ABUNDANCE MATRIX
-# ------------------------------------------------------------
-
+# 4. preparing species abundance matrix
 species_matrix <- species_profile %>%
   select(-sample_id) %>%
   mutate(across(everything(), as.numeric)) %>%
@@ -97,25 +75,23 @@ species_matrix <- species_profile %>%
 
 rownames(species_matrix) <- species_profile$sample_id
 
-# Check abundance values
+#Checking values
+
 if (anyNA(species_matrix) || any(!is.finite(species_matrix))) {
   stop("Species matrix contains NA, NaN or Inf values.")
 }
-
 if (any(species_matrix < 0)) {
   stop("Negative abundance values detected.")
 }
 
-# Remove species that are zero across all samples
+# Remove zero count species
 species_matrix <- species_matrix[
   ,
   colSums(species_matrix) > 0,
   drop = FALSE
 ]
-
 cat("Number of species retained:", ncol(species_matrix), "\n")
 
-# Remove samples with zero total abundance
 sample_totals <- rowSums(species_matrix)
 
 if (any(sample_totals == 0)) {
@@ -123,18 +99,15 @@ if (any(sample_totals == 0)) {
   
   valid_samples <- names(sample_totals[sample_totals > 0])
   
-  species_matrix <- species_matrix[valid_samples, , drop = FALSE]
-  
+  species_matrix <- species_matrix[valid_samples, , drop = FALSE]  
   metadata <- metadata %>%
     filter(sample_id %in% valid_samples) %>%
     arrange(match(sample_id, valid_samples))
 }
 
-# ------------------------------------------------------------
-# 5. CALCULATE SHANNON DIVERSITY
-# ------------------------------------------------------------
+# shannon diversity
 
-# Shannon index
+# shannon index
 shannon <- vegan::diversity(
   species_matrix,
   index = "shannon"
@@ -151,9 +124,7 @@ pielou <- ifelse(
   NA_real_
 )
 
-# ------------------------------------------------------------
-# 6. CREATE SAMPLE-LEVEL DIVERSITY TABLE
-# ------------------------------------------------------------
+# sample level diversity table
 
 diversity_table <- metadata %>%
   mutate(
@@ -178,7 +149,7 @@ diversity_table <- metadata %>%
     )
   )
 
-# Save sample-level table
+# Saving tjhe table
 write.csv(
   diversity_table,
   "Question1_Results/Sample_Level_Diversity.csv",
@@ -188,9 +159,7 @@ write.csv(
 cat("\nSample-level diversity summary:\n")
 print(head(diversity_table))
 
-# ------------------------------------------------------------
-# 7. DESCRIPTIVE STATISTICS
-# ------------------------------------------------------------
+#descriptive stas
 
 group_summary <- diversity_table %>%
   group_by(study_condition, age_category) %>%
@@ -217,15 +186,11 @@ write.csv(
   row.names = FALSE
 )
 
-# ============================================================
-# QUESTION 1(ii): STATISTICAL COMPARISONS
-# ============================================================
+# Ques1 (ii): statstical comparisons
 
-# ------------------------------------------------------------
 # 8. CONTROL VS DISEASED
-# ------------------------------------------------------------
 
-# Wilcoxon rank-sum test
+# Wilcoxon test
 condition_test <- wilcox.test(
   Shannon ~ study_condition,
   data = diversity_table,
@@ -248,9 +213,6 @@ condition_summary <- diversity_table %>%
 
 print(condition_summary)
 
-# ------------------------------------------------------------
-# 9. SHANNON DIVERSITY ACROSS AGE CATEGORIES
-# ------------------------------------------------------------
 
 # Kruskal-Wallis test
 age_test <- kruskal.test(
@@ -277,9 +239,7 @@ write.csv(
   row.names = FALSE
 )
 
-# ------------------------------------------------------------
-# 10. AGE CATEGORY COMPARISON WITHIN EACH CONDITION
-# ------------------------------------------------------------
+#11. age category comparisons
 
 age_within_condition <- diversity_table %>%
   group_by(study_condition) %>%
@@ -300,13 +260,7 @@ write.csv(
   row.names = FALSE
 )
 
-# ============================================================
-# QUESTION 1(iii): AGE × CONDITION INTERACTION
-# ============================================================
-
-# ------------------------------------------------------------
-# 11. TWO-WAY FACTORIAL ANOVA
-# ------------------------------------------------------------
+#Ques1 (iii): age and condition interaction
 
 # Type III ANOVA
 # Sum contrasts are used for Type III tests.
@@ -338,10 +292,7 @@ cat(
   "\n"
 )
 
-# ------------------------------------------------------------
-# 12. CHECK MODEL ASSUMPTIONS
-# ------------------------------------------------------------
-
+# checking assumptions
 # Normality of residuals
 residual_normality <- shapiro.test(
   residuals(interaction_model)
@@ -350,7 +301,6 @@ residual_normality <- shapiro.test(
 cat("\nSHAPIRO-WILK TEST:\n")
 print(residual_normality)
 
-# Homogeneity of variance
 variance_test <- car::leveneTest(
   Shannon ~ interaction(study_condition, age_category),
   data = diversity_table
@@ -359,7 +309,6 @@ variance_test <- car::leveneTest(
 cat("\nLEVENE'S TEST:\n")
 print(variance_test)
 
-# Save ANOVA table
 anova_output <- as.data.frame(interaction_results)
 
 write.csv(
@@ -367,9 +316,7 @@ write.csv(
   "Question1_Results/Two_Way_ANOVA.csv"
 )
 
-# ------------------------------------------------------------
-# 13. INTERACTION PLOT
-# ------------------------------------------------------------
+#PLots
 
 interaction_plot <- ggplot(
   diversity_table,
@@ -417,13 +364,8 @@ ggsave(
   dpi = 300
 )
 
-# ============================================================
-# QUESTION 1(iv): SAMPLE-LEVEL DIVERSITY FIGURE
-# ============================================================
-
-# ------------------------------------------------------------
-# 14. CREATE GROUP LABELS WITH SAMPLE SIZES
-# ------------------------------------------------------------
+# Ques1 (iv): Sample level diversity plots
+# 14. group tables
 
 diversity_table <- diversity_table %>%
   mutate(
@@ -444,9 +386,7 @@ group_labels <- diversity_table %>%
     x_label = paste0(age_category, "\n(n=", N, ")")
   )
 
-# ------------------------------------------------------------
-# 15. SAMPLE-LEVEL SHANNON DIVERSITY FIGURE
-# ------------------------------------------------------------
+# 15. shannon diversity figure
 
 # Calculate global statistical p-values
 p_condition <- condition_test$p.value
@@ -461,7 +401,6 @@ diversity_plot <- ggplot(
   )
 ) +
   
-  # Boxplots
   geom_boxplot(
     position = position_dodge(width = 0.8),
     width = 0.65,
@@ -469,7 +408,6 @@ diversity_plot <- ggplot(
     alpha = 0.65
   ) +
   
-  # Individual sample points
   geom_point(
     aes(color = study_condition),
     position = position_jitterdodge(
@@ -524,9 +462,7 @@ ggsave(
   dpi = 300
 )
 
-# ------------------------------------------------------------
-# 16. PIELOU'S EVENNESS FIGURE
-# ------------------------------------------------------------
+# 16. pielou's evenness
 
 pielou_plot <- ggplot(
   diversity_table,
@@ -568,13 +504,8 @@ ggsave(
   dpi = 300
 )
 
-# ============================================================
-# QUESTION 1(v): HIGHEST AND LOWEST MEDIAN DIVERSITY
-# ============================================================
+#Ques1 (v): highest and lowest median diversity
 
-# ------------------------------------------------------------
-# 17. IDENTIFY HIGHEST AND LOWEST MEDIAN GROUPS
-# ------------------------------------------------------------
 
 median_comparison <- diversity_table %>%
   group_by(study_condition, age_category) %>%
@@ -616,10 +547,7 @@ write.csv(
   row.names = FALSE
 )
 
-# ------------------------------------------------------------
-# 18. STATISTICAL COMPARISON OF HIGHEST AND LOWEST GROUPS
-# ------------------------------------------------------------
-
+# 18. statistical comparison 
 if (nrow(lowest_group) == 1 && nrow(highest_group) == 1) {
   
   high_condition <- as.character(highest_group$study_condition)
@@ -661,36 +589,34 @@ if (nrow(lowest_group) == 1 && nrow(highest_group) == 1) {
   )
 }
 
-# ============================================================
-# 19. SAVE ALL STATISTICAL RESULTS
-# ============================================================
+# saving results
 
 capture.output(
   {
-    cat("CONTROL VS DISEASED\n")
+    cat("control vs diseased\n")
     print(condition_test)
     
-    cat("\nAGE CATEGORY KRUSKAL-WALLIS\n")
+    cat("\nage category kruskal-wallis\n")
     print(age_test)
     
-    cat("\nAGE POST-HOC DUNN TEST\n")
+    cat("\nage post-hoc dunn test\n")
     print(age_posthoc)
     
-    cat("\nTWO-WAY ANOVA\n")
+    cat("\ntwo-way anova\n")
     print(interaction_results)
     
-    cat("\nSHAPIRO-WILK\n")
+    cat("\nshapiro-wilk test\n")
     print(residual_normality)
     
-    cat("\nLEVENE'S TEST\n")
+    cat("\nlevene's test\n")
     print(variance_test)
     
-    cat("\nHIGHEST AND LOWEST MEDIAN GROUPS\n")
+    cat("\nhighest and lowest median groups\n")
     print(highest_group)
     print(lowest_group)
     
     if (exists("high_low_test")) {
-      cat("\nHIGHEST VS LOWEST GROUP TEST\n")
+      cat("\nhighest vs lowest group test\n")
       print(high_low_test)
     }
   },
@@ -698,7 +624,6 @@ capture.output(
 )
 
 cat("\n========================================\n")
-cat("QUESTION 1 ANALYSIS COMPLETED!\n")
-cat("Check the Question1_Results folder.\n")
+cat("Question 1 analysis done!!!\n")
 cat("========================================\n")
 

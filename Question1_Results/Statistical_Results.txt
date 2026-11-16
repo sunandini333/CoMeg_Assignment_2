@@ -1,4 +1,4 @@
-CONTROL VS DISEASED
+control vs diseased
 
 	Wilcoxon rank sum test with continuity correction
 
@@ -7,7 +7,7 @@ W = 11168, p-value = 0.0001279
 alternative hypothesis: true location shift is not equal to 0
 
 
-AGE CATEGORY KRUSKAL-WALLIS
+age category kruskal-wallis
 
 	Kruskal-Wallis rank sum test
 
@@ -15,7 +15,7 @@ data:  Shannon by age_category
 Kruskal-Wallis chi-squared = 1.9885, df = 2, p-value = 0.37
 
 
-AGE POST-HOC DUNN TEST
+age post-hoc dunn test
 # A tibble: 3 × 9
   .y.    group1 group2    n1    n2 statistic     p p.adj p.adj.signif
 * <chr>  <chr>  <chr>  <int> <int>     <dbl> <dbl> <dbl> <chr>       
@@ -23,7 +23,7 @@ AGE POST-HOC DUNN TEST
 2 Shann… young  senior    65    43    1.23   0.219 0.329 ns          
 3 Shann… middl… senior   157    43    1.35   0.178 0.329 ns          
 
-TWO-WAY ANOVA
+two-way anova
 Anova Table (Type III tests)
 
 Response: Shannon
@@ -36,7 +36,7 @@ Residuals                      50.06 259
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-SHAPIRO-WILK
+shapiro-wilk test
 
 	Shapiro-Wilk normality test
 
@@ -44,13 +44,13 @@ data:  residuals(interaction_model)
 W = 0.88324, p-value = 2.196e-13
 
 
-LEVENE'S TEST
+levene's test
 Levene's Test for Homogeneity of Variance (center = median)
        Df F value Pr(>F)
 group   5  1.6126  0.157
       259               
 
-HIGHEST AND LOWEST MEDIAN GROUPS
+highest and lowest median groups
 # A tibble: 1 × 6
   study_condition age_category     N Median_Shannon Mean_Shannon
   <fct>           <fct>        <int>          <dbl>        <dbl>
@@ -62,7 +62,7 @@ HIGHEST AND LOWEST MEDIAN GROUPS
 1 Diseased        middle age      80           3.42         3.33
 # ℹ 1 more variable: IQR_Shannon <dbl>
 
-HIGHEST VS LOWEST GROUP TEST
+highest vs lowest group test
 
 	Wilcoxon rank sum test with continuity correction
 
