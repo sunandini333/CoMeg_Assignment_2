@@ -266,6 +266,40 @@ print(p_forty)
 ggsave(file.path(res_dir, "Top_40_Prevalence_Differences.png"),
        p_forty, width = 11, height = 10, dpi = 300)
 
+## main figure for (iv): the part (iii) species (significant top 3 each way)
+## plus the overall top 3 each way, so non-significant large shifts show up too.
+## bar = direction + size of the difference, colour = FDR significance
+iv_set <- bind_rows(up3_sig, down3_sig, up3, down3) %>%
+  distinct(Species, .keep_all = TRUE) %>%
+  mutate(Sig_Group = if_else(Significant, "Significant (FDR < 0.05)", "Not significant"),
+         Bar_Label = sprintf("%+.1f pp (q = %.3g)",
+                             Prevalence_Difference_PP, Adjusted_P_Value)) %>%
+  arrange(Prevalence_Difference_PP)
+
+iv_set$Species <- factor(iv_set$Species, levels = iv_set$Species)
+
+p_diff <- ggplot(iv_set, aes(Species, Prevalence_Difference_PP, fill = Sig_Group)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = Bar_Label,
+                hjust = if_else(Prevalence_Difference_PP > 0, -0.08, 1.08)),
+            size = 3.2) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  coord_flip() +
+  scale_fill_manual(values = c("Significant (FDR < 0.05)" = "steelblue",
+                               "Not significant" = "grey70")) +
+  scale_y_continuous(expand = expansion(mult = 0.35)) +
+  labs(title    = "Prevalence Difference Between Diseased and Control",
+       subtitle = "Positive values indicate greater prevalence in Diseased samples",
+       x = "Microbial Species",
+       y = "Prevalence Difference (percentage points)",
+       fill = "Statistical Significance") +
+  theme_classic(base_size = 12) +
+  theme(plot.title = element_text(face = "bold"), legend.position = "top")
+
+print(p_diff)
+ggsave(file.path(res_dir, "Prevalence_Difference.png"),
+       p_diff, width = 11, height = 7, dpi = 300)
+
 
 #### ---- (v) does prevalence track mean abundance? ---- ####
 
@@ -351,6 +385,59 @@ print(p_scatter)
 ggsave(file.path(res_dir, "Prevalence_vs_Mean_Abundance.png"),
        p_scatter, width = 9, height = 7, dpi = 300)
 
+## two example species for (v)
+# 1) biggest prevalence shift among significant species
+# 2) "discordant" species: significant, but prevalence and mean abundance
+#    move in opposite directions (picked the one with the largest prevalence shift)
+sig_abund <- prev_vs_abund %>% filter(Significant)
+
+sp_big <- sig_abund %>%
+  arrange(desc(abs(Prevalence_Difference_PP))) %>%
+  slice_head(n = 1) %>%
+  mutate(Selection = "Largest prevalence difference")
+
+sp_disc <- sig_abund %>%
+  filter(Mean_Abundance_Difference != 0,
+         sign(Prevalence_Difference_PP) != sign(Mean_Abundance_Difference)) %>%
+  arrange(desc(abs(Prevalence_Difference_PP))) %>%
+  slice_head(n = 1) %>%
+  mutate(Selection = "Prevalence and mean abundance disagree")
+
+picked <- bind_rows(sp_big, sp_disc) %>%
+  select(Selection, Species,
+         Control_Prevalence_Percent, Diseased_Prevalence_Percent,
+         Prevalence_Difference_PP, Adjusted_P_Value,
+         Control_Mean_Abundance, Diseased_Mean_Abundance, Mean_Abundance_Difference,
+         Control_Positive_Mean_Abundance, Diseased_Positive_Mean_Abundance)
+
+save_tab(picked, "Selected_Species_Biological_Interpretation.csv")
+print(picked)
+
+# side-by-side panels: prevalence (%) and mean abundance, Control vs Diseased
+picked_long <- bind_rows(
+  picked %>% transmute(Species, Metric = "Prevalence (%)",
+                       Control = Control_Prevalence_Percent,
+                       Diseased = Diseased_Prevalence_Percent),
+  picked %>% transmute(Species, Metric = "Mean Abundance (all samples)",
+                       Control = Control_Mean_Abundance,
+                       Diseased = Diseased_Mean_Abundance)
+) %>%
+  pivot_longer(c(Control, Diseased), names_to = "Condition", values_to = "Value")
+
+p_picked <- ggplot(picked_long, aes(Species, Value, fill = Condition)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.7) +
+  facet_wrap(~ Metric, scales = "free_y") +
+  labs(title = "Prevalence and Mean Abundance of Selected Species",
+       x = "Microbial Species", y = "Value", fill = "Study Condition") +
+  theme_classic(base_size = 12) +
+  theme(plot.title = element_text(face = "bold"),
+        axis.text.x = element_text(angle = 20, hjust = 1),
+        legend.position = "top")
+
+print(p_picked)
+ggsave(file.path(res_dir, "Selected_Species_Comparison.png"),
+       p_picked, width = 10, height = 6, dpi = 300)
+
 
 #### ---- text summary ---- ####
 
@@ -367,6 +454,7 @@ for (nm in names(top_lists)) {
 }
 cat("\nSpearman - prevalence vs mean abundance (zeros included):\n");  print(cor_overall)
 cat("\nSpearman - prevalence vs mean abundance (detected only):\n");   print(cor_detected)
+cat("\nSpecies picked for part (v):\n");                              print(picked)
 sink()
 
 cat("\nQ3 finished - outputs written to", res_dir, "\n")
