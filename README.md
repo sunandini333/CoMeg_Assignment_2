@@ -55,7 +55,7 @@ CoMeg_Assignment_2/
 │   ├── metadata_all.xlsx.csv
 │   └── species_profile_norm.xlsx.csv
 │
-├── Question1_results/
+├── Question1_Results/
 │   ├── Age_Posthoc_Dunn.csv
 │   ├── Age_Within_Condition_Posthoc.csv
 │   ├── Group_Summary.csv
@@ -67,7 +67,7 @@ CoMeg_Assignment_2/
 │   ├── Statistical_Results.txt
 │   └── Two_Way_ANOVA.csv
 │
-├── Question2_results/
+├── Question2_Results/
 │   ├── Alternative_PERMANOVA.csv
 │   ├── Bray_Curtis_Distance_Matrix.csv
 │   ├── Complete_Statistical_Results.txt
@@ -81,7 +81,7 @@ CoMeg_Assignment_2/
 │   ├── Sequential_Model_Comparison.csv
 │   └── Strongest_Metadata_Association.csv
 │
-├── Question3_results/
+├── Question3_Results/
 │   ├── Complete_Question3_Results.txt
 │   ├── Complete_Species_Prevalence.csv
 │   ├── Complete_Statistical_Results.txt
@@ -103,7 +103,7 @@ CoMeg_Assignment_2/
 │   ├── Top_40_Prevalence_Differences.png
 │   └── Top_6_Species_Prevalence.png
 │
-├── Question4_results/
+├── Question4_Results/
 │   ├── All_Spearman_Correlations.csv
 │   ├── Alternative_All_Correlations.csv
 │   ├── Alternative_Selected_Edges.csv
@@ -355,45 +355,46 @@ To identify microbial species that differ in prevalence between Control and Dise
 
 **1. Presence–Absence Transformation**
 
-The abundance matrix was converted into a binary presence–absence matrix.
+Each abundance value was converted to detected (1) or not detected (0):
 
-\[
-PA_{ij}=
-\begin{cases}
-1 & \text{if abundance}_{ij}>0\\
-0 & \text{otherwise}
-\end{cases}
-\]
+$$
+PA_{ij}=\begin{cases}1 & \text{if abundance}_{ij}>0\\ 0 & \text{otherwise}\end{cases}
+$$
 
 **2. Prevalence Calculation**
 
-Species prevalence was calculated as:
+For each species, prevalence within a group was calculated as:
 
-<img width="551" height="59" alt="image" src="https://github.com/user-attachments/assets/d041319f-47c2-4370-adc1-d56f80a2bc40" />
+$$
+\text{Prevalence}_{g}=\frac{\text{number of samples in group } g \text{ where the species is detected}}{\text{total samples in group } g}\times 100
+$$
 
+The prevalence difference was defined as Diseased − Control (in percentage points), so positive values indicate higher prevalence in Diseased samples.
 
 **3. Prevalence Filtering**
 
-Species detected in at least five samples overall were retained for statistical analysis.
+Species detected in at least five of the 265 samples were retained for statistical testing.
 
 - Initial species: **777**
 - Retained species: **392**
 
 **4. Statistical Testing**
 
-Fisher's exact test was performed independently for each species to compare prevalence between Control and Diseased groups.
+For each retained species, a 2 × 2 table (Control/Diseased × present/absent) was tested with a two-sided Fisher's exact test. An odds ratio above 1 indicates higher odds of detection in Control samples.
 
-P-values were adjusted using the Benjamini–Hochberg procedure to control the false discovery rate.
+P-values were adjusted using the Benjamini–Hochberg procedure, and species with adjusted p < 0.05 were considered significant.
 
 **5. Correlation Analysis**
 
-Spearman correlation was used to investigate the relationship between prevalence differences and mean abundance differences.
+Mean abundance was calculated in two ways: across all samples in a group (zeros included) and only across samples where the species was detected. Spearman correlation was used to test whether prevalence differences track each of these mean abundance differences. Species not detected in one of the groups (no detected-only mean) were excluded, leaving 388 species for both correlations.
 
 ### Results
 
 - Total species analyzed before filtering: **777**
 - Species retained after prevalence filtering: **392**
 - Statistically significant species after BH correction: **90**
+
+The tables below list the largest differences among **significant** species. Among all 392 retained species (regardless of significance), the largest positive differences were *Lactobacillus_fermentum* (+14.49 pp), *Granulicatella_adiacens* (+14.05 pp) and *Scardovia_wiggsiae* (+12.42 pp); these three, plus the three negative species below, are shown in `Top_6_Species_Prevalence.png`, where significant species are marked with `*`. The negative top 3 are the same in both rankings.
 
 ### Significant Positive Prevalence Differences
 
@@ -413,23 +414,22 @@ Spearman correlation was used to investigate the relationship between prevalence
 
 ### Correlation Results
 
-The Spearman correlation between prevalence difference and mean abundance difference, including zeros, was:
+| Comparison | Spearman rho | p-value |
+|---|---:|---:|
+| Prevalence difference vs mean abundance difference (zeros included) | 0.4677 | 1.77 × 10⁻²² |
+| Prevalence difference vs mean abundance difference (detected samples only) | 0.1913 | 1.50 × 10⁻⁴ |
 
-- Spearman rho = **0.4677**
-- p-value = **1.77 × 10⁻²²**
-
-This indicates a positive association between the two measures across species.
+Prevalence differences were moderately and positively associated with mean abundance differences when zeros were included. The association was much weaker when abundance was considered only in samples where the species was detected, indicating that much of the overall abundance difference is driven by how often a species is present rather than how abundant it is when present.
 
 ### Visualizations
 
-- Top six species prevalence comparison.
-- Top 40 prevalence differences.
-- Prevalence versus mean abundance scatterplot.
-- Selected species comparison.
+- `Top_6_Species_Prevalence.png`: Control vs Diseased prevalence for the top 3 positive and top 3 negative species.
+- `Top_40_Prevalence_Differences.png`: 20 largest positive and 20 largest negative prevalence differences.
+- `Prevalence_vs_Mean_Abundance.png`: prevalence difference vs mean abundance difference.
 
 ### Output Directory
 
-`Question3_results/`
+`Question3_Results/`
 
 ---
 
