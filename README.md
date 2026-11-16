@@ -207,14 +207,14 @@ Two alpha diversity indices were calculated.
 
 The Shannon index measures microbial diversity by considering both species richness and relative abundance.
 
-\[
+$$
 H'=-\sum_{i=1}^{S}p_i\ln(p_i)
-\]
+$$
 
 Where:
 
-- \(p_i\) represents the relative abundance of species \(i\).
-- \(S\) represents the number of observed species.
+- $p_i$ represents the relative abundance of species $i$.
+- $S$ represents the number of observed species.
 
 A higher Shannon index indicates greater microbial diversity.
 
@@ -222,9 +222,9 @@ A higher Shannon index indicates greater microbial diversity.
 
 Pielou's evenness measures how evenly microbial abundance is distributed across species.
 
-\[
+$$
 J=\frac{H'}{\ln(S)}
-\]
+$$
 
 A value closer to 1 indicates a more even microbial community.
 
